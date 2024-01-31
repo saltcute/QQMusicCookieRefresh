@@ -9,6 +9,7 @@
   "author": "saltcute",
   "license": "MIT",
   "dependencies": {
+    "delay": "^5.0.0",
     "puppeteer": "^21.10.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",

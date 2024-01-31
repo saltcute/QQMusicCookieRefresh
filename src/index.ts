@@ -1,3 +1,4 @@
+import delay from "delay";
 import puppeteer, { Frame } from "puppeteer";
 
 const qqid = process.env.QQID;
@@ -17,6 +18,7 @@ const qqid = process.env.QQID;
     console.log("got ifram 2")
     await frame2.waitForSelector(`#img_out_${qqid}`);
     await frame2.click(`#img_out_${qqid}`);
+    await delay(2000);
     const cookie = (await page.cookies()).map(v => `${v.name}=${v.value}`).join("; ");
     console.log(cookie);
     browser.close();
