@@ -1,7 +1,10 @@
 import delay from "delay";
-import puppeteer, { Frame } from "puppeteer";
+import puppeteer from "puppeteer";
+import axios from 'axios';
 
-const qqid = process.env.QQID;
+const qqid = process.env.QQID?.trim();
+const remoteHostname = process.env.HOST?.trim();
+const remoteCode = process.env.CODE?.trim();
 
 (async () => {
     const browser = await puppeteer.launch({ headless: "new" });
@@ -21,6 +24,11 @@ const qqid = process.env.QQID;
     await page.waitForFunction(() => !document.querySelector("#login_frame"));
     await delay(2000);
     const cookie = (await page.cookies()).map(v => `${v.name}=${v.value}`).join("; ");
+    await axios.post(`https://${remoteHostname}/qqmusic/updateCookie`, {
+        cookie, code: remoteCode
+    }).catch((e) => {
+        console.log("Cannot update remote cookie", e);
+    })
     console.log(cookie);
     browser.close();
 })()
