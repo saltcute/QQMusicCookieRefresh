@@ -1,0 +1,42 @@
+{
+    "compilerOptions": {
+        "importsNotUsedAsValues": "remove",
+        "declaration": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "target": "es2020",
+        "module": "Node16",
+        "preserveValueImports": false,
+        "moduleResolution": "node16",
+        "lib": [
+            "DOM",
+            "ES2020",
+            "ES2021",
+            "ES2021.String"
+        ],
+        "baseUrl": "./src",
+        "rootDirs": [
+            "src"
+        ],
+        "outDir": "./dist",
+        "strict": true,
+        "typeRoots": [
+            "./typings",
+            "node_modules/@types"
+        ],
+        "esModuleInterop": true,
+        "sourceMap": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "include": [
+        "env.d.ts",
+        "src/**/*",
+        "src/**/*.vue",
+        "./src/**/*.ts",
+        ".eslintrc.js",
+    ],
+    "exclude": [
+        "./src/tests/*.ts"
+    ]
+}
