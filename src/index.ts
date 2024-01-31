@@ -4,7 +4,7 @@ import puppeteer, { Frame } from "puppeteer";
 const qqid = process.env.QQID;
 
 (async () => {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     await page.goto("https://y.qq.com");
     await page.click(".top_login__link");
