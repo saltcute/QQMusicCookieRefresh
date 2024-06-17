@@ -5,6 +5,7 @@ import axios from 'axios';
 const qqid = process.env.QQID?.trim();
 const remoteHostname = process.env.HOST?.trim();
 const remoteCode = process.env.CODE?.trim();
+const useHTTPS = process.env.USE_HTTPS?.trim().toLowerCase() == "false" ? false : true;
 
 (async () => {
     const browser = await puppeteer.launch({ headless: "new" });
@@ -24,7 +25,7 @@ const remoteCode = process.env.CODE?.trim();
     await page.waitForFunction(() => !document.querySelector("#login_frame"));
     await delay(2000);
     const cookie = (await page.cookies()).map(v => `${v.name}=${v.value}`).join("; ");
-    await axios.post(`https://${remoteHostname}/qqmusic/updateCookie`, {
+    await axios.post(`http${useHTTPS ? "s" : ""}://${remoteHostname}/qqmusic/updateCookie`, {
         cookie, code: remoteCode
     }).catch((e) => {
         console.log("Cannot update remote cookie", e);
