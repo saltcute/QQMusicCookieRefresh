@@ -8,7 +8,7 @@ const remoteCode = process.env.CODE?.trim();
 const useHTTPS = process.env.USE_HTTPS?.trim().toLowerCase() == "false" ? false : true;
 
 (async () => {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     await page.goto("https://y.qq.com");
     console.log("opened page");
