@@ -8,7 +8,7 @@ const remoteCode = process.env.CODE?.trim();
 const useHTTPS =
     process.env.USE_HTTPS?.trim().toLowerCase() == "false" ? false : true;
 
-const browser = await puppeteer.launch({ headless: "new" });
+const browser = await puppeteer.launch({ headless: false });
 
 async function qq() {
     console.log("starting qq login");
@@ -58,32 +58,37 @@ async function netease() {
     console.log("opened page");
     await page.click("a[data-action=login]");
     console.log("clicked to login");
-    await page.waitForSelector(".mrc-modal-appear-done", {
-        timeout: 120 * 1000,
-    });
-    await page
-        .locator("a")
-        .filter((button) =>
-            button.textContent.trim().toLowerCase().includes("其他登录")
-        )
-        .click();
+    // await page.waitForSelector(".mrc-modal-container", {
+    //     timeout: 120 * 1000,
+    // });
+    console.log("looking for model switch button");
+    await (
+        await page.waitForSelector("a ::-p-text(选择其他登录模式)")
+    )?.click();
     console.log("switched login mode");
-    await page.click(".mrc-modal-container input");
-    page.locator("a")
-        .filter((button) =>
-            button.textContent.trim().toLowerCase().includes("QQ登录")
-        )
-        .click();
+    await (await page.waitForSelector("#j-official-terms"))?.click();
+    await (await page.waitForSelector("a ::-p-text(QQ登录)"))?.click();
+    const waitForNewTap = setTimeout(() => {
+        throw "Cannot find the new tab";
+    }, 120 * 1000);
+    await delay(5000);
     const loginPage = (await browser.pages()).find(
         (v) => v.url() != page.url()
     );
+    clearTimeout(waitForNewTap);
     if (!loginPage) return;
     console.log("switched to qq login page");
-    await loginPage.waitForSelector(`#img_out_${qqid}`, {
-        timeout: 120 * 1000,
-    });
-    await loginPage.click(`#img_out_${qqid}`);
+    await loginPage.waitForSelector("#ptlogin_iframe", { timeout: 120 * 1000 });
+    const frame1 = await (await loginPage.$("#ptlogin_iframe"))?.contentFrame();
+    if (!frame1) return;
+    console.log("got iframe");
+    await (
+        await frame1.waitForSelector(`#img_out_${qqid}`, {
+            timeout: 120 * 1000,
+        })
+    )?.click();
     console.log("logging in");
+    await delay(10000);
     loginPage.on("close", async () => {
         console.log("login page closed");
         const cookie = (await page.cookies())
@@ -107,7 +112,7 @@ async function netease() {
 }
 
 (async () => {
-    await qq();
+    // await qq();
     await netease();
     browser.close();
 })();
