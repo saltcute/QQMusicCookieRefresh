@@ -9,7 +9,7 @@ const useHTTPS =
     process.env.USE_HTTPS?.trim().toLowerCase() == "false" ? false : true;
 
 const browser = await puppeteer.launch({ 
-	headless: false,
+	headless: true,
 	// browser: "firefox"
 });
 
