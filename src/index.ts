@@ -8,7 +8,10 @@ const remoteCode = process.env.CODE?.trim();
 const useHTTPS =
     process.env.USE_HTTPS?.trim().toLowerCase() == "false" ? false : true;
 
-const browser = await puppeteer.launch({ headless: true });
+const browser = await puppeteer.launch({ 
+	headless: false,
+	// browser: "firefox"
+});
 
 async function qq() {
     console.log("starting qq login");
@@ -47,6 +50,7 @@ async function qq() {
         .catch((e) => {
             console.log("Cannot update remote cookie", e);
         });
+    await page.close();
     console.log(cookie);
 }
 
