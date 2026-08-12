@@ -16,9 +16,7 @@ if (!qqid || !remoteCode || !remoteHostname) {
 }
 
 const browser = await puppeteer.launch({
-    // headless: true,
-    headless: false,
-    // executablePath: "/usr/bin/google-chrome",
+    headless: true,
     browser: "firefox",
     extraPrefsFirefox: {
         'network.lna.enabled': false, // Disables local network access restrictions/prompts
